@@ -24,8 +24,9 @@ class Mesh {
     private:
         float problem_data[2];
         short quantities[4];
+        int j = 0;
         Node** nodes;
-        Element** elements;
+        Element** elements;         
         Condition** dirichlet_conditions;
         Condition** neumann_conditions;
 
@@ -67,6 +68,31 @@ class Mesh {
         void insert_node(Node* node, short position){
             nodes[position] = node;
         }
+
+        void heap_sort_nodes(Element* element){
+
+            Element* temporary = element;
+            Node* item;
+            Node* temp;
+
+            for(int k = 4 ; k>0 ; k--){
+                for(int i = 1 ; i <= k ; i-- ){
+                    item = element->get_node_i(k);
+                    j = i/2;
+                    while(j>0 && element->get_node_i(j) < item){
+                        element->set_node_i(i, element->get_node_i(j));
+                        i = j;
+                        j = j/2;
+                    }
+                element->set_node_i(i, item);
+                }
+                temp = element->get_node1();
+                element->set_node1(element->get_node_i(k));
+                element->set_node_i(k, temp);
+            }
+
+        }
+
         Node* get_node(short position){
             return nodes[position];
         }
